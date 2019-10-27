@@ -21,25 +21,33 @@ class App extends React.Component{
           {'location': 'Starbucks', 'charge': '+$0.92'},
       ],
 
-      currentPage: "page2"
+      currentPage: "HOME"
     }
 
-    this.onButtonPress = this.onButtonPress.bind(this)
+    this.buttonHOMEtoTRINFO = this.buttonHOMEtoTRINFO.bind(this)
+    this.buttonHOMEtoBANK = this.buttonHOMEtoBANK.bind(this)
+    this.buttonBACK = this.buttonBACK.bind(this)
+
   }
 
-  onButtonPress(){
-    console.log("Pressed")
-    if (this.state.currentPage === "page1"){
-      this.setState({currentPage: "page2"})
-    }
-    else if(this.state.currentPage === "page2"){
-      this.setState({currentPage: "page1"})
-    }
+  buttonHOMEtoTRINFO(){
+      console.log("Home to Transaction Info")
+      this.setState({currentPage: "TRINFO"})
+  }
+
+  buttonHOMEtoBANK(){
+      console.log("Home to Bank")
+      this.setState({currentPage: "BANK"})
+  }
+
+  buttonBACK(){
+      console.log("BACK")
+      this.setState({currentPage: "HOME"})
   }
 
 
   renderPage(){
-    if (this.state.currentPage === "page1"){
+    if (this.state.currentPage === "HOME"){
       return(
         <View style={styles.page}>
           <View style={styles.body}>
@@ -59,7 +67,7 @@ class App extends React.Component{
             </Text>
             <ScrollView style={{marginTop: 30, marginBottom: 5, marginRight:5,marginLeft:5}}>{
                 this.state.transactions.map((item, index) => (
-                    <TouchableHighlight onPress={this.onButtonPress}>
+                    <TouchableHighlight onPress={this.buttonHOMEtoTRINFO}>
                       <View key = {item.charge} style={styles.transaction}>
                         <Text style={styles.location}>{item.location}</Text>
                         <Text style={styles.charge}>{item.charge}</Text>
@@ -69,27 +77,86 @@ class App extends React.Component{
               } 
             </ScrollView>
           </View>
+          <View style={{flexDirection:'row', alignItems: 'stretch'}}>
+            <View style={{marginLeft: 20, marginTop: 50, width: 120, alignSelf: 'flex-start'}}>
+              <Button
+                  title="Account"
+                  color="#c67258"
+                  onPress={this.buttonHOMEtoBANK}
+              />
+            </View>
+            <View style={{marginLeft: 80, marginTop: 50, width: 120, alignSelf: 'flex-end'}}>
+              <Button
+                  title="Your Banks"
+                  color="#c67258"
+                  onPress={this.buttonHOMEtoBANK}
+              />
+            </View>
+          </View>
         </View>
       )
     }
 
-    if (this.state.currentPage === "page2"){
+    if (this.state.currentPage === "TRINFO"){
       return(
         <View style={styles.page}>
+        <View style={styles.body}>
+          
+            <Text style={styles.total}>
+              {this.state.total}
+            </Text>
+            <Text style={styles.textLarge}>
+              Total Change{"\n"}
+            </Text>
+          </View>
             <View style={styles.body2}>
-              <Text style={styles.white}>
+              <Text style={{textAlign: 'center', fontSize: 30, color: '#fff'}}>
                 Transaction Info
               </Text>
               <View style={styles.transactionInfo}>
-                <Text style={styles.white}>
-                  Test
+                <Text style={{textAlign: 'left', fontSize: 15, color: '#fff'}}>
+                  Location:       Ikes Sandwiches{"\n"}
+                  You Owed:       $8.75{"\n"}
+                  You Paid:       $10.00{"\n"}
+                  Cash Back:      $1.00{"\n"}
+                  Change:         $0.23{"\n"}
+                  Tip?            No
                 </Text>
               </View>
             </View>
             <Button
               title="Back"
               color="#c67258"
-              onPress={this.onButtonPress}
+              onPress={this.buttonBACK}
+            />
+        </View>
+      )
+    }
+
+    if (this.state.currentPage === "BANK"){
+      return(
+        <View style={styles.page}>
+        <View style={styles.body}>
+          </View>
+            <View style={styles.body2}>
+              <Text style={{textAlign: 'center', fontSize: 30, color: '#fff'}}>
+                Transaction Info
+              </Text>
+              <View style={styles.transactionInfo}>
+                <Text style={{textAlign: 'left', fontSize: 15, color: '#fff'}}>
+                  Location:       Ikes Sandwiches{"\n"}
+                  You Owed:       $8.75{"\n"}
+                  You Paid:       $10.00{"\n"}
+                  Cash Back:      $1.00{"\n"}
+                  Change:         $0.23{"\n"}
+                  Tip?            No
+                </Text>
+              </View>
+            </View>
+            <Button
+              title="Back"
+              color="#c67258"
+              onPress={this.buttonBACK}
             />
         </View>
       )
@@ -112,8 +179,7 @@ class App extends React.Component{
 }
 
 const styles = StyleSheet.create({
-
-  //page1
+  //HOME
   page: {
     flex: 1,
     backgroundColor: '#f7b18f',
@@ -179,11 +245,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 
-  //page2
+  //TRINFO
   body2: {
     height: 300,
     backgroundColor: '#e88162',
-    marginTop: 250,
     marginBottom: 20,
     marginRight: 20,
     marginLeft: 20,
@@ -192,8 +257,8 @@ const styles = StyleSheet.create({
 
   transactionInfo: {
     backgroundColor: '#c67258',
-    height: 250,
-    marginTop: 20,
+    height: 245,
+    marginTop: 5,
     marginRight: 10,
     marginLeft: 10,
   },
