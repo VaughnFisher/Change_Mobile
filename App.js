@@ -110,11 +110,7 @@ class App extends React.Component{
     if (this.state.currentPage === "HOME"){
       return(
         <View style={styles.page}>
-          <Button
-            title="refresh"
-            color="#c67258"
-            onPress={this.forceUpdateHandler}
-          />
+          
           <View style={styles.body}>
           
             <Text style={styles.total}>
