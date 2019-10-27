@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, Button, ScrollView,
-         TouchableHighlight,TextInput} from 'react-native';
+         TouchableHighlight, TouchableOpacity, TextInput} from 'react-native';
 
+import ChangeAPI from './ChangeAPI.js';
+let changeAPI = new ChangeAPI();
 
 
 class App extends React.Component{
@@ -22,18 +24,21 @@ class App extends React.Component{
           {'location': 'Starbucks', 'charge': '+$0.92'},
       ],
 
-      currentPage: "ACCOUNT"
+      currentPage: "HOME",
+
     }
 
     this.buttonHOMEtoTRINFO = this.buttonHOMEtoTRINFO.bind(this)
     this.buttonHOMEtoBANK = this.buttonHOMEtoBANK.bind(this)
     this.buttonHOMEtoACCOUNT = this.buttonHOMEtoACCOUNT.bind(this)
+    this.buttonHOMEtoCHARITY = this.buttonHOMEtoCHARITY.bind(this)
     this.buttonBACK = this.buttonBACK.bind(this)
 
   }
 
   buttonHOMEtoTRINFO(){
       console.log("Home to Transaction Info")
+      api_getUserBankAccount()
       this.setState({currentPage: "TRINFO"})
   }
 
@@ -43,14 +48,52 @@ class App extends React.Component{
   }
 
   buttonHOMEtoACCOUNT(){
-      console.log("Home to ACCOUNT")
+      console.log("Home to Account")
       this.setState({currentPage: "ACCOUNT"})
   }
+
+  buttonHOMEtoCHARITY(){
+      console.log("Home to Charity")
+      this.setState({currentPage: "CHARITY"})
+  }
+
 
   buttonBACK(){
       console.log("Back")
       this.setState({currentPage: "HOME"})
   }
+
+
+  //API calls ---------------------------------------
+
+  async api_getAllTransactionsForUser() {
+    let result = await changeAPI.getUserTransactions();
+    console.log(result);
+  }
+
+  async api_getUserBankAccount() {
+    let result = await changeAPI.getUserBankAccount();
+    console.log(result);
+  }
+
+  async api_getUserProfile() {
+    let result = await changeAPI.getUserProfile();
+    console.log(result);
+  }
+
+
+  getCurrentlySelectedUser = () => {
+    if (this.state.truth[PT_selectedUserID] !== false) {
+      // search for user with the right ID
+      for (let i = 0; i < __users.length; i++) {
+        if (__users[i]['id'] === this.state.truth[PT_selectedUserID]) {
+          return __users[i];
+        }
+      }
+    }
+    return false;
+  }
+
 
 
   renderPage(){
@@ -69,7 +112,7 @@ class App extends React.Component{
           </View>
 
           <View style={styles.recentTransactions}>
-            <Text style={{position: 'absolute', fontSize: 20, color: '#fff'}}> 
+            <Text style={{position: 'absolute', marginLeft: 7, fontSize: 20, color: '#fff'}}> 
               Location                                   Change
             </Text>
             <ScrollView style={{marginTop: 30, marginBottom: 5, marginRight:5,marginLeft:5}}>{
@@ -99,6 +142,13 @@ class App extends React.Component{
                   onPress={this.buttonHOMEtoBANK}
               />
             </View>
+          </View>
+          <View style={{ marginTop: 30, marginLeft: 120, width: 120}}>
+            <Button
+                title="Charity"
+                color="#c67258"
+                onPress={this.buttonHOMEtoCHARITY}
+            />
           </View>
         </View>
       )
@@ -189,17 +239,105 @@ class App extends React.Component{
       )
     }
 
+    if (this.state.currentPage === "CHARITY"){
+      return(
+        <View style={styles.page}>
+          <Text style={{marginTop: 25, textAlign: 'center', fontSize: 40, color: '#c67258'}}>
+            Current Charity
+          </Text>
+          <Text style={{marginTop: -10,textAlign: 'center', fontSize: 40, color: '#fff'}}>
+            DirectRelief
+          </Text>
+          <View style={styles.body3}>
+            <Image 
+                  style={{height:200, width: 300, alignSelf: 'center', marginTop: 10}}
+                  source={require('./assets/charity.png')}
+            />
+            <View style={styles.transfer}>
+              <Button
+                title="Donate"
+                color="#c67258"
+              />
+            </View>
+            <View style={styles.bankInfo}>
+                <TextInput  
+                  placeholder="Amount"  
+                  underlineColorAndroid='transparent'  
+                  style={styles.TextInputStyle}  
+                  keyboardType={'numeric'} 
+                />
+                <Text style={{textAlign: 'center', fontSize:16, color: '#fff'}}>
+                  How much would you like to donate?
+                </Text>
+            </View>
+
+          </View>
+
+          <Text style={styles.total3}>
+            {this.state.total}
+          </Text>
+          <Text style={styles.textLarge3}>
+            Total Change{"\n"}
+          </Text>
+          <Button
+            title="Back"
+            color="#c67258"
+            onPress={this.buttonBACK}
+          />
+        </View>
+      )
+    }
+
     if (this.state.currentPage === "ACCOUNT"){
       return(
         
         <View style={styles.page4}>
+          <Text style={{fontSize: 50, color: '#c67258', textAlign: 'center'}}>
+            Alex Starr
+          </Text>
           <View style={styles.body4}>
-            <Text>
-              
-            </Text>
+            <Image 
+                  style={{ height:150, width: 150, alignSelf: 'center', marginTop: 10, borderRadius: 75, borderWidth: 4, borderColor: '#fff' }}
+                  source={require('./assets/Alex.jpg')}
+
+            />
             <View style={styles.info}>
-        
-          </View>
+              <TouchableOpacity>
+                <View style={styles.setting}>
+                  <Text style={{ marginTop: 22, marginLeft: 15 , fontSize: 20, color: '#fff'}}>
+                    Personal
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                  <View style={styles.setting}>
+                  <Text style={{ marginTop: 22, marginLeft: 15 , fontSize: 20, color: '#fff'}}>
+                    Transaction Settings
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                  <View style={styles.setting}>
+                  <Text style={{ marginTop: 22, marginLeft: 15 , fontSize: 20, color: '#fff'}}>
+                    Privacy & Security
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                  <View style={styles.setting}>
+                  <Text style={{ marginTop: 22, marginLeft: 15 , fontSize: 20, color: '#fff'}}>
+                    Notifications
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                  <View style={styles.setting}>
+                  <Text style={{ marginTop: 22, marginLeft: 15 , fontSize: 20, color: '#fff'}}>
+                    Support
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
           <Button
                 title="Back"
@@ -277,7 +415,9 @@ const styles = StyleSheet.create({
   },
 
   transaction:{
-    borderWidth: 0.5,
+    height: 40,
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
     borderColor: '#b7b7b7',
     backgroundColor: '#c67258',
     textAlignVertical: 'center',
@@ -286,13 +426,17 @@ const styles = StyleSheet.create({
 
   location: {
     color: '#fff',
-    fontSize: 25,
+    fontSize: 18,
     width: 250,
+    textAlignVertical: 'center',
+    marginLeft: 5,
   },
 
   charge: {
     color: '#fff',
-    fontSize: 25,
+    fontSize: 20,
+    marginRight: 5,
+    textAlignVertical: 'center',
   },
 
   //TRINFO
@@ -378,7 +522,7 @@ const styles = StyleSheet.create({
 
   body4: {
     backgroundColor: '#e88162',
-    height: '85%',
+    height: '80%',
     marginRight: 20,
     marginLeft: 20,
     marginBottom: 20,
@@ -387,12 +531,19 @@ const styles = StyleSheet.create({
 
   info: {
     backgroundColor: '#c67258',
-    height: 380,
-    marginTop: 175,
+    height: 370,
+    marginTop: 12,
     marginRight: 10,
     marginLeft: 10,
     marginBottom: 10,
 
+  },
+
+  setting: {
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderColor: '#b7b7b7',
+    height: 74,
   }
 
 
