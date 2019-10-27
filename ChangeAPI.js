@@ -10,7 +10,7 @@
    - /get/user/bankaccount
 */
 
-let __url = "http://160307eb.ngrok.io";
+let __url = "http://27c223b7.ngrok.io";
 
 let __defaultProfileID = "5e52a2f9-2e37-4699-94c9-165aa38a7271"
 let __defaultStoreID = "b7acdf48-cb62-4cf5-8389-61d361fa727f";
@@ -37,7 +37,7 @@ class ChangeAPI {
   async getUserProfile(profileID = __defaultProfileID) {
     let api_url = __url + "/get/user/profile?userID=" + profileID;
     let response = await fetch(api_url)
-    .then(response => response.json())
+    .then(function(response) {return response.json();})
     .then(data => {
       return data;
     })

@@ -12,7 +12,7 @@ class App extends React.Component{
     super()
 
     this.state = {
-      total: "$1.35",
+      total: "$-.--",
       transactions: [
           {'location': 'Ikes Sandwiches', 'charge': '+$0.23'},
           {'location': 'Target', 'charge': '-$0.10'},
@@ -34,11 +34,34 @@ class App extends React.Component{
     this.buttonHOMEtoCHARITY = this.buttonHOMEtoCHARITY.bind(this)
     this.buttonBACK = this.buttonBACK.bind(this)
 
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+
   }
+
+  async componentDidMount() {
+    let userProfile = await this.api_getUserProfile();
+    let transactions = await this.api_getAllTransactionsForUser();
+    let changeBalance = userProfile[0][3];
+    this.setState({total: "$" + changeBalance});
+
+    let newTransactions = [];
+    for (let i = transactions.length - 1; i >=0; i--) {
+      console.log(transactions[i]);
+      console.log("-");
+      newTransactions.push({
+        'location': transactions[i][3],
+        'charge': (transactions[i][5]) ? "+$" + transactions[i][8] : "-$" + transactions[i][8] 
+      });
+    }
+    this.setState({'transactions': newTransactions});
+  }
+
+  forceUpdateHandler(){
+    this.forceUpdate();
+  };
 
   buttonHOMEtoTRINFO(){
       console.log("Home to Transaction Info")
-      api_getUserBankAccount()
       this.setState({currentPage: "TRINFO"})
   }
 
@@ -68,30 +91,17 @@ class App extends React.Component{
 
   async api_getAllTransactionsForUser() {
     let result = await changeAPI.getUserTransactions();
-    console.log(result);
+    return result;
   }
 
   async api_getUserBankAccount() {
     let result = await changeAPI.getUserBankAccount();
-    console.log(result);
+    return result;
   }
 
   async api_getUserProfile() {
     let result = await changeAPI.getUserProfile();
-    console.log(result);
-  }
-
-
-  getCurrentlySelectedUser = () => {
-    if (this.state.truth[PT_selectedUserID] !== false) {
-      // search for user with the right ID
-      for (let i = 0; i < __users.length; i++) {
-        if (__users[i]['id'] === this.state.truth[PT_selectedUserID]) {
-          return __users[i];
-        }
-      }
-    }
-    return false;
+    return result;
   }
 
 
@@ -100,6 +110,11 @@ class App extends React.Component{
     if (this.state.currentPage === "HOME"){
       return(
         <View style={styles.page}>
+          <Button
+            title="refresh"
+            color="#c67258"
+            onPress={this.forceUpdateHandler}
+          />
           <View style={styles.body}>
           
             <Text style={styles.total}>
