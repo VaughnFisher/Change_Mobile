@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Button, ScrollView, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, ScrollView,
+         TouchableHighlight,TextInput} from 'react-native';
 
 
 
@@ -21,11 +22,12 @@ class App extends React.Component{
           {'location': 'Starbucks', 'charge': '+$0.92'},
       ],
 
-      currentPage: "HOME"
+      currentPage: "ACCOUNT"
     }
 
     this.buttonHOMEtoTRINFO = this.buttonHOMEtoTRINFO.bind(this)
     this.buttonHOMEtoBANK = this.buttonHOMEtoBANK.bind(this)
+    this.buttonHOMEtoACCOUNT = this.buttonHOMEtoACCOUNT.bind(this)
     this.buttonBACK = this.buttonBACK.bind(this)
 
   }
@@ -40,8 +42,13 @@ class App extends React.Component{
       this.setState({currentPage: "BANK"})
   }
 
+  buttonHOMEtoACCOUNT(){
+      console.log("Home to ACCOUNT")
+      this.setState({currentPage: "ACCOUNT"})
+  }
+
   buttonBACK(){
-      console.log("BACK")
+      console.log("Back")
       this.setState({currentPage: "HOME"})
   }
 
@@ -82,7 +89,7 @@ class App extends React.Component{
               <Button
                   title="Account"
                   color="#c67258"
-                  onPress={this.buttonHOMEtoBANK}
+                  onPress={this.buttonHOMEtoACCOUNT}
               />
             </View>
             <View style={{marginLeft: 80, marginTop: 50, width: 120, alignSelf: 'flex-end'}}>
@@ -100,29 +107,29 @@ class App extends React.Component{
     if (this.state.currentPage === "TRINFO"){
       return(
         <View style={styles.page}>
-        <View style={styles.body}>
-          
-            <Text style={styles.total}>
-              {this.state.total}
-            </Text>
-            <Text style={styles.textLarge}>
-              Total Change{"\n"}
-            </Text>
-          </View>
-            <View style={styles.body2}>
-              <Text style={{textAlign: 'center', fontSize: 30, color: '#fff'}}>
-                Transaction Info
-              </Text>
-              <View style={styles.transactionInfo}>
-                <Text style={{textAlign: 'left', fontSize: 15, color: '#fff'}}>
-                  Location:       Ikes Sandwiches{"\n"}
-                  You Owed:       $8.75{"\n"}
-                  You Paid:       $10.00{"\n"}
-                  Cash Back:      $1.00{"\n"}
-                  Change:         $0.23{"\n"}
-                  Tip?            No
+            <View style={styles.body}>
+
+                <Text style={styles.total}>
+                  {this.state.total}
                 </Text>
-              </View>
+                <Text style={styles.textLarge}>
+                  Total Change{"\n"}
+                </Text>
+            </View>
+            <View style={styles.body2}>
+                <Text style={{textAlign: 'center', fontSize: 30, color: '#fff'}}>
+                  Transaction Info
+                </Text>
+                <View style={styles.transactionInfo}>
+                  <Text style={{textAlign: 'left', fontSize: 15, color: '#fff'}}>
+                    Location:       Ikes Sandwiches{"\n"}
+                    You Owed:       $8.75{"\n"}
+                    You Paid:       $10.00{"\n"}
+                    Cash Back:      $1.00{"\n"}
+                    Change:         $0.23{"\n"}
+                    Tip?            No
+                  </Text>
+                </View>
             </View>
             <Button
               title="Back"
@@ -136,28 +143,70 @@ class App extends React.Component{
     if (this.state.currentPage === "BANK"){
       return(
         <View style={styles.page}>
-        <View style={styles.body}>
-          </View>
-            <View style={styles.body2}>
-              <Text style={{textAlign: 'center', fontSize: 30, color: '#fff'}}>
-                Transaction Info
-              </Text>
-              <View style={styles.transactionInfo}>
-                <Text style={{textAlign: 'left', fontSize: 15, color: '#fff'}}>
-                  Location:       Ikes Sandwiches{"\n"}
-                  You Owed:       $8.75{"\n"}
-                  You Paid:       $10.00{"\n"}
-                  Cash Back:      $1.00{"\n"}
-                  Change:         $0.23{"\n"}
-                  Tip?            No
-                </Text>
-              </View>
-            </View>
-            <Button
-              title="Back"
-              color="#c67258"
-              onPress={this.buttonBACK}
+          <Text style={{marginTop: 25, textAlign: 'center', fontSize: 40, color: '#c67258'}}>
+            Current Bank
+          </Text>
+          <Text style={{marginTop: -10,textAlign: 'center', fontSize: 40, color: '#fff'}}>
+            CHASE
+          </Text>
+          <View style={styles.body3}>
+            <Image 
+                  style={{height:200, width: 300, alignSelf: 'center', marginTop: 10}}
+                  source={require('./assets/chase.png')}
             />
+            <View style={styles.transfer}>
+              <Button
+                title="TRANSFER"
+                color="#c67258"
+              />
+            </View>
+            <View style={styles.bankInfo}>
+                <TextInput  
+                  placeholder="Amount"  
+                  underlineColorAndroid='transparent'  
+                  style={styles.TextInputStyle}  
+                  keyboardType={'numeric'} 
+                />
+                <Text style={{textAlign: 'center', fontSize:16, color: '#fff'}}>
+                  How much would you like to transfer?
+                </Text>
+            </View>
+
+          </View>
+
+          <Text style={styles.total3}>
+            {this.state.total}
+          </Text>
+          <Text style={styles.textLarge3}>
+            Total Change{"\n"}
+          </Text>
+          <Button
+            title="Back"
+            color="#c67258"
+            onPress={this.buttonBACK}
+          />
+        </View>
+      )
+    }
+
+    if (this.state.currentPage === "ACCOUNT"){
+      return(
+        
+        <View style={styles.page4}>
+          <View style={styles.body4}>
+            <Text>
+              
+            </Text>
+            <View style={styles.info}>
+        
+          </View>
+          </View>
+          <Button
+                title="Back"
+                color="#c67258"
+                onPress={this.buttonBACK}
+                style={{flexGrow: 0, position: 'absolute',bottom:0}}
+          />
         </View>
       )
     }
@@ -179,6 +228,7 @@ class App extends React.Component{
 }
 
 const styles = StyleSheet.create({
+
   //HOME
   page: {
     flex: 1,
@@ -247,6 +297,7 @@ const styles = StyleSheet.create({
 
   //TRINFO
   body2: {
+    flex: 1,
     height: 300,
     backgroundColor: '#e88162',
     marginBottom: 20,
@@ -257,15 +308,93 @@ const styles = StyleSheet.create({
 
   transactionInfo: {
     backgroundColor: '#c67258',
-    height: 245,
     marginTop: 5,
     marginRight: 10,
     marginLeft: 10,
+    height: 300,
   },
 
   white: {
     color: '#fff',
+  },
+  //BANK
+  body3: {
+    flex: 1,
+    backgroundColor: '#e88162',
+    marginRight: 20,
+    marginLeft: 20,
+    borderRadius: 10,
+  },
+
+  bankInfo: {
+    backgroundColor: '#c67258',
+    marginTop: 10,
+    marginRight: 10,
+    marginLeft: 10,
+    height: 130,
+  },
+
+  textLarge3: {
+    color: '#c67258',
+    fontSize: 40,
+    textAlign: 'center',
+    marginBottom: -30,
+  },
+
+  total3: {
+    color: '#fff',
+    fontSize: 40,
+    textAlign: 'center',
+    marginBottom: -10,
+  },
+
+  TextInputStyle:{
+    textAlign:'center',
+    fontSize: 30,
+    borderRadius: 10,  
+    borderWidth: 2,  
+    borderColor: '#b7b7b7',
+    marginTop: 35,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+
+  transfer:{
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    height: 50,
+  },
+
+  //ACCOUNT
+
+  page4: {
+    display: 'flex',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: '#f7b18f',
+  },
+
+  body4: {
+    backgroundColor: '#e88162',
+    height: '85%',
+    marginRight: 20,
+    marginLeft: 20,
+    marginBottom: 20,
+    borderRadius: 10
+  },
+
+  info: {
+    backgroundColor: '#c67258',
+    height: 380,
+    marginTop: 175,
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom: 10,
+
   }
+
 
 
 });       
